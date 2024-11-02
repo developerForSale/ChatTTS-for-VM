@@ -1,7 +1,9 @@
 import os
+import subprocess
 from pathlib import Path
 import hashlib
 import requests
+from vm import RSVExecutor
 from io import BytesIO
 from typing import Dict, Tuple, Optional
 from mmap import mmap, ACCESS_READ
@@ -151,7 +153,15 @@ def download_dns_yaml(url: str, folder: str, headers: Dict[str, str]):
         logger.get_logger().info(f"downloaded into {folder}")
 
 
-def download_all_assets(tmpdir: str, version="0.2.8"):
+def execute_rvc_models_downloader(voice_magician_flag: bool = False, *args):
+    if voice_magician_flag:
+        executor = RSVExecutor.get_executor()
+        executor.start_process(*args)
+    else:
+        subprocess.run(*args)
+
+
+def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version="0.2.8"):
     import subprocess
     import platform
 
@@ -186,7 +196,14 @@ def download_all_assets(tmpdir: str, version="0.2.8"):
         else:
             download_and_extract_tar_gz(RVCMD_URL, tmpdir)
             os.chmod(cmdfile, 0o755)
-        subprocess.run([cmdfile, "-notui", "-w", "0", "assets/chtts"])
+        execute_rvc_models_downloader(
+            voice_magician_flag,
+            cmdfile,
+            "-notui",
+            "-w",
+            "0",
+            "assets/chtts"
+        )
     except Exception:
         BASE_URL = (
             "https://gitea.seku.su/fumiama/RVC-Models-Downloader/releases/download/"
@@ -207,14 +224,13 @@ def download_all_assets(tmpdir: str, version="0.2.8"):
         else:
             download_and_extract_tar_gz(RVCMD_URL, tmpdir)
             os.chmod(cmdfile, 0o755)
-        subprocess.run(
-            [
-                cmdfile,
-                "-notui",
-                "-w",
-                "0",
-                "-dns",
-                os.path.join(tmpdir, "dns.yaml"),
-                "assets/chtts",
-            ]
+        execute_rvc_models_downloader(
+            voice_magician_flag,
+            cmdfile,
+            "-notui",
+            "-w",
+            "0",
+            "-dns",
+            os.path.join(tmpdir, "dns.yaml"),
+            "assets/chtts"
         )

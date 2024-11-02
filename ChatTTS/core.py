@@ -65,6 +65,7 @@ class Chat:
         source: Literal["huggingface", "local", "custom"] = "local",
         force_redownload=False,
         custom_path: Optional[torch.serialization.FILE_LIKE] = None,
+        voice_magician_flag: bool = False,
     ) -> Optional[str]:
         if source == "local":
             download_path = os.getcwd()
@@ -73,7 +74,7 @@ class Chat:
                 or force_redownload
             ):
                 with tempfile.TemporaryDirectory() as tmp:
-                    download_all_assets(tmpdir=tmp)
+                    download_all_assets(tmpdir=tmp, voice_magician_flag=voice_magician_flag)
                 if not check_all_assets(
                     Path(download_path), self.sha256_map, update=False
                 ):
