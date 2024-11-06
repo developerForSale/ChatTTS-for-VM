@@ -24,9 +24,7 @@ class RSVExecutor:
 
     def start_process(self, *args):
         self._process = subprocess.Popen(
-            [args[0], *args[1:]],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            [args[0], *args[1:]], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         self.send_out_runtime_event()
 
