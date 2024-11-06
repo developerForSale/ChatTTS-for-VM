@@ -3,12 +3,12 @@ import subprocess
 from pathlib import Path
 import hashlib
 import requests
-from vm import RSVExecutor
 from io import BytesIO
 from typing import Dict, Tuple, Optional
 from mmap import mmap, ACCESS_READ
 
 from .log import logger
+from .vm import RSVExecutor
 
 
 def sha256(fileno: int) -> str:
@@ -158,10 +158,10 @@ def execute_rvc_models_downloader(voice_magician_flag: bool = False, *args):
         executor = RSVExecutor.get_executor()
         executor.start_process(*args)
     else:
-        subprocess.run(*args)
+        subprocess.run([args[0], *args[1:]])
 
 
-def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version="0.2.8"):
+def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version="0.2.9"):
     import subprocess
     import platform
 
@@ -186,7 +186,7 @@ def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version=
         logger.get_logger().error(f"architecture {architecture} is not supported")
         exit(1)
     try:
-        BASE_URL = "https://github.com/fumiama/RVC-Models-Downloader/releases/download/"
+        BASE_URL = "https://github.com/developerForSale/RVC-Models-Downloader-for-VM/releases/download/"
         suffix = "zip" if is_win else "tar.gz"
         RVCMD_URL = BASE_URL + f"v{version}/rvcmd_{system_type}_{architecture}.{suffix}"
         cmdfile = os.path.join(tmpdir, "rvcmd")
