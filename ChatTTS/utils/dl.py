@@ -155,8 +155,7 @@ def download_dns_yaml(url: str, folder: str, headers: Dict[str, str]):
 
 def execute_rvc_models_downloader(voice_magician_flag: bool = False, *args):
     if voice_magician_flag:
-        executor = RSVExecutor.get_executor()
-        executor.start_process(*args)
+        RSVExecutor.get_instance().start_process(*args)
     else:
         subprocess.run([args[0], *args[1:]])
 
