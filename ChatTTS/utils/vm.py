@@ -1,4 +1,3 @@
-import logging
 import subprocess
 
 
@@ -23,9 +22,19 @@ class RSVExecutor:
     def set_handler_func(self, func):
         self._handler_func = func
 
-    def event_handler(self, event: str = '', level: int = logging.NOTSET):
+    def event_handler(self, event: str):
         if self._handler_func is not None:
-            self._handler_func(event, level)
+            self._handler_func(event)
+
+    def send_out_runtime_event(self):
+        while True:
+            stdout = self._process.stdout.readline()
+            if stdout:
+                self.event_handler(stdout.decode("utf-8"))
+
+            if self._process.poll() is not None:
+                self._process = None
+                break
 
     def start_process(self, *args):
         self._process = subprocess.Popen(
@@ -33,13 +42,3 @@ class RSVExecutor:
             stdout=subprocess.PIPE
         )
         self.send_out_runtime_event()
-
-    def send_out_runtime_event(self):
-        while True:
-            stdout = self._process.stdout.readline()
-            if stdout:
-                self.event_handler(stdout.decode("utf-8"), logging.INFO)
-
-            if self._process.poll() is not None:
-                self._process = None
-                break
