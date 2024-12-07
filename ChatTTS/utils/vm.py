@@ -11,7 +11,7 @@ class RSVExecutor:
         return cls._instance
 
     def __init__(self):
-        if not hasattr(self, '_initialized'):
+        if not hasattr(self, "_initialized"):
             self._process = None
             self._handler_func = None
             self._initialized = True
@@ -39,8 +39,5 @@ class RSVExecutor:
                 break
 
     def start_process(self, *args):
-        self._process = subprocess.Popen(
-            [args[0], *args[1:]],
-            stdout=subprocess.PIPE
-        )
+        self._process = subprocess.Popen([args[0], *args[1:]], stdout=subprocess.PIPE)
         self.send_out_runtime_event()

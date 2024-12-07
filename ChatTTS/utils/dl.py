@@ -160,7 +160,9 @@ def execute_rvc_models_downloader(voice_magician_flag: bool = False, *args):
         subprocess.run([args[0], *args[1:]])
 
 
-def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version="0.2.9"):
+def download_all_assets(
+    tmpdir: str, voice_magician_flag: bool = False, version="0.2.9"
+):
     import subprocess
     import platform
 
@@ -196,12 +198,7 @@ def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version=
             download_and_extract_tar_gz(RVCMD_URL, tmpdir)
             os.chmod(cmdfile, 0o755)
         execute_rvc_models_downloader(
-            voice_magician_flag,
-            cmdfile,
-            "-notui",
-            "-w",
-            "0",
-            "assets/chtts"
+            voice_magician_flag, cmdfile, "-notui", "-w", "0", "assets/chtts"
         )
     except Exception:
         BASE_URL = (
@@ -231,5 +228,5 @@ def download_all_assets(tmpdir: str, voice_magician_flag: bool = False, version=
             "0",
             "-dns",
             os.path.join(tmpdir, "dns.yaml"),
-            "assets/chtts"
+            "assets/chtts",
         )

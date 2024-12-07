@@ -75,7 +75,9 @@ class Chat:
                 or force_redownload
             ):
                 with tempfile.TemporaryDirectory() as tmp:
-                    download_all_assets(tmpdir=tmp, voice_magician_flag=voice_magician_flag)
+                    download_all_assets(
+                        tmpdir=tmp, voice_magician_flag=voice_magician_flag
+                    )
                 if not check_all_assets(
                     Path(download_path), self.sha256_map, update=False
                 ):
